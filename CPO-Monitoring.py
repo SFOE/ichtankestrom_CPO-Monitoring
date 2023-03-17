@@ -4,8 +4,8 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
-%matplotlib inline
-%config InlineBackend.figure_format='retina'
+#%matplotlib inline
+#%config InlineBackend.figure_format='retina'
 
 url = "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/oicp/ch.bfe.ladestellen-elektromobilitaet.json"
 
