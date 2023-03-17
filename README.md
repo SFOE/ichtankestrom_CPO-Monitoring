@@ -1,15 +1,22 @@
 # ich-tanke-strom.ch CPO-Monitoring
 
-- [Alle CPOs zusammen](#alle-cpos-zusammen)
+- [Big Five](#big-five)
+- [Alle CPOs ausser Big Five](#alle-cpos-ausser-big-five)
 - [Anzahl Standorte pro CPO](#anzahl-standorte-pro-cpo)
 - [Anzahl Ladesäulen pro CPO](#anzahl-ladesäulen-pro-cpo)
 - [Anzahl Plugs pro CPO](#anzahl-plugs-pro-cpo)
 
-## Alle CPOs zusammen
+## Big Five
 
-![image](plots/Overview-Standorte.png)
-![image](plots/Overview-Ladesaeulen.png)
-![image](plots/Overview-Plugs.png)
+![image](plots/Overview-Big5-Standorte.png)
+![image](plots/Overview-Big5-Ladesaeulen.png)
+![image](plots/Overview-Big5-Plugs.png)
+
+## Alle CPOs ausser Big Five
+
+![image](plots/Overview-Big5other-Standorte.png)
+![image](plots/Overview-Big5other-Ladesaeulen.png)
+![image](plots/Overview-Big5other-Plugs.png)
 
 ## Anzahl Standorte pro CPO
 
