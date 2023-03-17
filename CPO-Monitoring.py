@@ -51,15 +51,28 @@ df['Plugs'] = df['Plugs'].astype('int')
 
 attributes = ["Standorte", "Ladesaeulen", "Plugs"]
 
+# Overviews
 for attribute in attributes:
-    df_all = df.pivot(index="Datum", columns=["OperatorID"],values=attribute)
+    df_all = df[(df["OperatorID"] != "CHEVP") & (df["OperatorID"] != "CH*CCC") & (df["OperatorID"] != "CH*ECU") & (df["OperatorID"] != "CH*REP") & (df["OperatorID"] != "CH*SWISSCHARGE")] 
+    df_all = df_all.pivot(index="Datum", columns=["OperatorID"],values=attribute)
     df_all.plot(figsize=(15,10))
     plt.legend(loc='best')
     plt.title("Anzahl " + attribute)
-    plt.savefig('plots/Overview-' + attribute + '.png')
+    plt.savefig('plots/Overview-Big5other-' + attribute + '.png')
     #plt.show()
     plt.close()
     
+    df_all2 = df[(df["OperatorID"] == "CHEVP") | (df["OperatorID"] == "CH*CCC") | (df["OperatorID"] == "CH*ECU") | (df["OperatorID"] == "CH*REP") | (df["OperatorID"] == "CH*SWISSCHARGE")]
+    df_all2 = df_all2.pivot(index="Datum", columns=["OperatorID"],values=attribute)
+    df_all2.plot(figsize=(15,10))
+    plt.legend(loc='best')
+    plt.title("Anzahl " + attribute)
+    plt.savefig('plots/Overview-Big5-' + attribute + '.png')
+    #plt.show()
+    plt.close()    
+    
+    
+# CPOs einzeln
 for attribute in attributes:
     for cpo in df["OperatorID"].unique():
         df_cpo = df.copy()
