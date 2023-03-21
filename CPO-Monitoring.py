@@ -50,26 +50,42 @@ df['Ladesaeulen'] = df['Ladesaeulen'].astype('int')
 df['Plugs'] = df['Plugs'].astype('int')
 
 attributes = ["Standorte", "Ladesaeulen", "Plugs"]
+bigfive = ["CHEVP", "CH*CCC", "CH*ECU", "CH*REP", "CH*SWISSCHARGE"]
+otherrealtime = ["CH*AIL","CH*ENMOBILECHARGE","CH*EVAEMOBILITAET","CH*EWACHARGE","CH*FASTNED","CH*IBC","CH*MOBILECHARGE","CH*MOBIMOEMOBILITY","CH*PACEMOBILITY","CH*PARKCHARGE", "CH*SCHARGE", "CH*TAE"]
 
 # Overviews
 for attribute in attributes:
-    df_all = df[(df["OperatorID"] != "CHEVP") & (df["OperatorID"] != "CH*CCC") & (df["OperatorID"] != "CH*ECU") & (df["OperatorID"] != "CH*REP") & (df["OperatorID"] != "CH*SWISSCHARGE")] 
+    
+    # Big Five
+    df_all = df[df["OperatorID"].isin(bigfive)]
     df_all = df_all.pivot(index="Datum", columns=["OperatorID"],values=attribute)
     df_all.plot(figsize=(15,10))
     plt.legend(loc='best')
     plt.title("Anzahl " + attribute)
-    plt.savefig('plots/Overview-Big5other-' + attribute + '.png')
+    plt.savefig('plots/Overview-Big5-' + attribute + '.png')
+    #plt.show()
+    plt.close()   
+    
+    # Other realtime
+    df_all = df[df["OperatorID"].isin(otherrealtime)]
+    df_all = df_all.pivot(index="Datum", columns=["OperatorID"],values=attribute)
+    df_all.plot(figsize=(15,10))
+    plt.legend(loc='best')
+    plt.title("Anzahl " + attribute)
+    plt.savefig('plots/Overview-otherrealtime-' + attribute + '.png')
     #plt.show()
     plt.close()
     
-    df_all2 = df[(df["OperatorID"] == "CHEVP") | (df["OperatorID"] == "CH*CCC") | (df["OperatorID"] == "CH*ECU") | (df["OperatorID"] == "CH*REP") | (df["OperatorID"] == "CH*SWISSCHARGE")]
-    df_all2 = df_all2.pivot(index="Datum", columns=["OperatorID"],values=attribute)
-    df_all2.plot(figsize=(15,10))
+    # Offline provider
+    df_all = df[~df["OperatorID"].isin(bigfive)]
+    df_all = df_all[~df_all["OperatorID"].isin(otherrealtime)]
+    df_all = df_all.pivot(index="Datum", columns=["OperatorID"],values=attribute)
+    df_all.plot(figsize=(15,10))
     plt.legend(loc='best')
     plt.title("Anzahl " + attribute)
-    plt.savefig('plots/Overview-Big5-' + attribute + '.png')
+    plt.savefig('plots/Overview-offline-' + attribute + '.png')
     #plt.show()
-    plt.close()    
+    plt.close()
     
     
 # CPOs einzeln
