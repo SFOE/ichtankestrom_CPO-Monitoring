@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 #%matplotlib inline
 #%config InlineBackend.figure_format='retina'
 
-url = "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/oicp/ch.bfe.ladestellen-elektromobilitaet.json"
+url = "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/ch.bfe.ladestellen-elektromobilitaet.json"
 
 r = requests.get(url)
 data = r.json()
