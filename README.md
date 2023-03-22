@@ -7,6 +7,8 @@
 - [Anzahl Ladesäulen pro CPO](#anzahl-ladesäulen-pro-cpo)
 - [Anzahl Plugs pro CPO](#anzahl-plugs-pro-cpo)
 
+Welche OperatorID gehört zu welchem Betreiber? Siehe [Liste](https://github.com/SFOE/ichtankestrom_Documentation/blob/main/List%20of%20Charging%20Point%20Operators.md).
+
 ## Big Five
 
 ![image](plots/Overview-Big5-Standorte.png)
