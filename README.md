@@ -2,11 +2,11 @@
 
 - [Big Five](#big-five)
 - [CPOs mit Echtzeit-Daten ohne Big Five](#cpos-mit-echtzeit-daten-ohne-big-five)
-- [CPOs ohne Echtzeit-Daten](#cpos-ohne-echtzeit-daten)
 - [Anzahl Standorte pro CPO](#anzahl-standorte-pro-cpo)
 - [Anzahl Ladesäulen pro CPO](#anzahl-ladesäulen-pro-cpo)
 - [Anzahl Plugs pro CPO](#anzahl-plugs-pro-cpo)
-
+- [CPOs ohne Echtzeit-Daten](#cpos-ohne-echtzeit-daten)
+- 
 Welche OperatorID gehört zu welchem Betreiber? Siehe [Liste](https://github.com/SFOE/ichtankestrom_Documentation/blob/main/List%20of%20Charging%20Point%20Operators.md).
 
 ## Big Five
