@@ -21,12 +21,6 @@ Welche OperatorID gehört zu welchem Betreiber? Siehe [Liste](https://github.com
 ![image](plots/Overview-otherrealtime-Ladesaeulen.png)
 ![image](plots/Overview-otherrealtime-Plugs.png)
 
-## CPOs ohne Echtzeit-Daten
-
-![image](plots/Overview-offline-Standorte.png)
-![image](plots/Overview-offline-Ladesaeulen.png)
-![image](plots/Overview-offline-Plugs.png)
-
 ## Anzahl Standorte pro CPO
 
 ![image](plots/CH*CCC-Standorte.png)
@@ -53,3 +47,10 @@ Welche OperatorID gehört zu welchem Betreiber? Siehe [Liste](https://github.com
 ![image](plots/CH*REP-Plugs.png)
 ![image](plots/CH*SWISSCHARGE-Plugs.png)
 ![image](plots/CHEVP-Plugs.png)
+
+
+## CPOs ohne Echtzeit-Daten
+
+![image](plots/Overview-offline-Standorte.png)
+![image](plots/Overview-offline-Ladesaeulen.png)
+![image](plots/Overview-offline-Plugs.png)
