@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 #%matplotlib inline
 #%config InlineBackend.figure_format='retina'
 
-url = "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/ch.bfe.ladestellen-elektromobilitaet.json"
+url = "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/oicp/ch.bfe.ladestellen-elektromobilitaet.json"
 
 r = requests.get(url)
 data = r.json()
@@ -38,7 +38,6 @@ df_plugs.rename(columns={"index": "OperatorID"}, inplace=True)
 df_result = pd.merge(df_standorte, df_ladesaeulen, how="left", on=["OperatorID"])
 df_result = pd.merge(df_result, df_plugs, how="left", on=["OperatorID"])
 df_result["Datum"]= datetime.today().strftime("%Y-%m-%d")
-df_result
 
 #Speichern
 df_result.to_csv("CPO-Monitoring.csv", header=False, index=False, mode='a')
@@ -53,12 +52,33 @@ attributes = ["Standorte", "Ladesaeulen", "Plugs"]
 bigfive = ["CHEVP", "CH*CCC", "CH*ECU", "CH*REP", "CH*SWISSCHARGE"]
 otherrealtime = ["CH*AIL","CH*ENMOBILECHARGE","CH*EVAEMOBILITAET","CH*EWACHARGE","CH*FASTNED","CH*IBC","CH*MOBILECHARGE","CH*MOBIMOEMOBILITY","CH*PACEMOBILITY","CH*PARKCHARGE", "CH*SCHARGE", "CH*TAE"]
 
+CPO_dict = {
+    "CHEVP": "GreenMotion",
+    "CH*CCC": "Move",
+    "CH*ECU": "eCarUp",
+    "CH*REP": "Plug'n Roll",
+    "CH*SWISSCHARGE": "Swisscharge",
+    "CH*AIL":"AIL",
+    "CH*ENMOBILECHARGE":"en mobilecharge",
+    "CH*EVAEMOBILITAET":"EVA E-Mobilität",
+    "CH*EWACHARGE":"EWAcharge",
+    "CH*FASTNED":"Fastned",
+    "CH*IBC":"IBC",
+    "CH*MOBILECHARGE":"mobilecharge",
+    "CH*MOBIMOEMOBILITY":"Mobimo emobility",
+    "CH*PACEMOBILITY":"PAC e-moblity",
+    "CH*PARKCHARGE":"PARK & CHARGE",
+    "CH*SCHARGE":"S-Charge",
+    "CH*TAE":"Matterhorn Terminal Täsch"
+}
+
 # Overviews
 for attribute in attributes:
     
     # Big Five
     df_all = df[df["OperatorID"].isin(bigfive)]
-    df_all = df_all.pivot(index="Datum", columns=["OperatorID"],values=attribute)
+    df_all = df_all.replace({"OperatorID": CPO_dict})
+    df_all = df_all.pivot(index="Datum", columns=["OperatorID"], values=attribute)
     df_all.plot(figsize=(15,10))
     plt.legend(loc='best')
     plt.title("Anzahl " + attribute)
@@ -68,6 +88,7 @@ for attribute in attributes:
     
     # Other realtime
     df_all = df[df["OperatorID"].isin(otherrealtime)]
+    df_all = df_all.replace({"OperatorID": CPO_dict})
     df_all = df_all.pivot(index="Datum", columns=["OperatorID"],values=attribute)
     df_all.plot(figsize=(15,10))
     plt.legend(loc='best')
@@ -78,6 +99,7 @@ for attribute in attributes:
     
     # Offline provider
     df_all = df[~df["OperatorID"].isin(bigfive)]
+    df_all = df_all.replace({"OperatorID": CPO_dict})
     df_all = df_all[~df_all["OperatorID"].isin(otherrealtime)]
     df_all = df_all.pivot(index="Datum", columns=["OperatorID"],values=attribute)
     df_all.plot(figsize=(15,10))
@@ -93,6 +115,7 @@ for attribute in attributes:
     for cpo in df["OperatorID"].unique():
         df_cpo = df.copy()
         df_cpo = df_cpo[df_cpo["OperatorID"] == cpo]
+        df_cpo = df_cpo.replace({"OperatorID": CPO_dict})
         df_cpo_all = df_cpo.pivot(index="Datum", columns=["OperatorID"],values=attribute)
         df_cpo_all.plot(figsize=(15,10))
         plt.legend(loc='best')
