@@ -1,24 +1,50 @@
 import json
 import requests
 import pandas as pd
+import geopandas as gpd
+import fiona
+#import leafmap
 import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
 #%matplotlib inline
 #%config InlineBackend.figure_format='retina'
 
-url = "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/oicp/ch.bfe.ladestellen-elektromobilitaet.json"
+# Geometrie Schweiz
+url_schweiz = "geodata/swissBOUNDARIES3D_1_4_TLM_LANDESGEBIET_WGS84.shp"
+Schweiz = gpd.read_file(url_schweiz)
+Schweiz = Schweiz.loc[Schweiz.NAME=="Schweiz"]
+Schweiz = Schweiz.set_crs('epsg:4326')
 
+# Daten ich-tanke-strom
+url = "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/oicp/ch.bfe.ladestellen-elektromobilitaet.json"
 r = requests.get(url)
 data = r.json()
-
 df = pd.json_normalize(data["EVSEData"], record_path=['EVSEDataRecord'], meta=['OperatorID'])
 # nur Schweiz
 df = df[df["Address.Country"] == "CHE"]
 
+# new data frame with split value columns
+new = df["GeoCoordinates.Google"].str.split(" ", n = 1, expand = True)
+ 
+# making separate first name column from new data frame
+df["lat"] = new[1]
+df["lat"] = df["lat"].astype(float)
+ 
+# making separate last name column from new data frame
+df["lon"]= new[0]
+df["lon"] = df["lon"].astype(float)
+
+df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.lat,df.lon))
+df = df.set_crs('epsg:4326')
+
+# spatial join
+df_join = gpd.sjoin(Schweiz, df, how='right', predicate='intersects')
+df = df_join[df_join["UUID"].notnull()]
+
 #Ladesaeulen
 df_ladesaeulen = df['OperatorID'].value_counts().to_frame().reset_index()
-df_ladesaeulen.rename(columns={"OperatorID": "Ladesaeulen"}, inplace=True)
+df_ladesaeulen.rename(columns={"count": "Ladesaeulen"}, inplace=True)
 df_ladesaeulen.rename(columns={"index": "OperatorID"}, inplace=True)
 
 #Standorte
@@ -27,11 +53,30 @@ df_standorte = df_standorte.groupby('OperatorID')['GeoCoordinates.Google'].apply
 df_standorte.rename(columns={"GeoCoordinates.Google": "Standorte"}, inplace=True)
 
 #Plugs
-df = pd.json_normalize(data["EVSEData"], record_path=['EVSEDataRecord', 'Plugs'], meta=['OperatorID', ['EVSEDataRecord', 'Address', 'Country']])
+df = pd.json_normalize(data["EVSEData"], record_path=['EVSEDataRecord', 'Plugs'], meta=['OperatorID', ['EVSEDataRecord', 'Address', 'Country'], ['EVSEDataRecord', 'GeoCoordinates', 'Google']])
 # nur Schweiz
 df = df[df["EVSEDataRecord.Address.Country"] == "CHE"]
+
+# new data frame with split value columns
+new = df["EVSEDataRecord.GeoCoordinates.Google"].str.split(" ", n = 1, expand = True)
+ 
+# making separate first name column from new data frame
+df["lat"] = new[1]
+df["lat"] = df["lat"].astype(float)
+ 
+# making separate last name column from new data frame
+df["lon"]= new[0]
+df["lon"] = df["lon"].astype(float)
+
+df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.lat,df.lon))
+df = df.set_crs('epsg:4326')
+
+# spatial join
+df_join = gpd.sjoin(Schweiz, df, how='right', predicate='intersects')
+df = df_join[df_join["UUID"].notnull()]
+
 df_plugs = df['OperatorID'].value_counts().to_frame().reset_index()
-df_plugs.rename(columns={"OperatorID": "Plugs"}, inplace=True)
+df_plugs.rename(columns={"count": "Plugs"}, inplace=True)
 df_plugs.rename(columns={"index": "OperatorID"}, inplace=True)
 
 #Zusammenfuehren
