@@ -17,7 +17,7 @@ Schweiz = Schweiz.loc[Schweiz.NAME=="Schweiz"]
 Schweiz = Schweiz.set_crs('epsg:4326')
 
 # Daten ich-tanke-strom
-url = "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/oicp/ch.bfe.ladestellen-elektromobilitaet.json"
+url = "https://data.geo.admin.ch/ch.bfe.ladestellen-elektromobilitaet/data/ch.bfe.ladestellen-elektromobilitaet.json"
 r = requests.get(url)
 data = r.json()
 df = pd.json_normalize(data["EVSEData"], record_path=['EVSEDataRecord'], meta=['OperatorID'])
@@ -25,8 +25,9 @@ df = pd.json_normalize(data["EVSEData"], record_path=['EVSEDataRecord'], meta=['
 df = df[df["Address.Country"] == "CHE"]
 
 # new data frame with split value columns
+df["GeoCoordinates.Google"] = df["GeoCoordinates.Google"].str.replace(",", " ")
 new = df["GeoCoordinates.Google"].str.split(" ", n = 1, expand = True)
- 
+
 # making separate first name column from new data frame
 df["lat"] = new[1]
 df["lat"] = df["lat"].astype(float)
@@ -41,6 +42,9 @@ df = df.set_crs('epsg:4326')
 # spatial join
 df_join = gpd.sjoin(Schweiz, df, how='right', predicate='intersects')
 df = df_join[df_join["UUID"].notnull()]
+
+#outside Switzerland
+#df_outside = df_join[df_join["UUID"].isnull()]
 
 #Ladesaeulen
 df_ladesaeulen = df['OperatorID'].value_counts().to_frame().reset_index()
@@ -58,6 +62,7 @@ df = pd.json_normalize(data["EVSEData"], record_path=['EVSEDataRecord', 'Plugs']
 df = df[df["EVSEDataRecord.Address.Country"] == "CHE"]
 
 # new data frame with split value columns
+df["EVSEDataRecord.GeoCoordinates.Google"]= df["EVSEDataRecord.GeoCoordinates.Google"].str.replace(","," ")
 new = df["EVSEDataRecord.GeoCoordinates.Google"].str.split(" ", n = 1, expand = True)
  
 # making separate first name column from new data frame
@@ -87,6 +92,13 @@ df_result["Datum"]= datetime.today().strftime("%Y-%m-%d")
 #Speichern
 df_result.to_csv("CPO-Monitoring.csv", header=False, index=False, mode='a')
 
+
+#m = leafmap.Map(height="400px", width="800px")
+#m.add_basemap("SwissFederalGeoportal.NationalMapColor")
+#m.add_gdf(df_outside, layer_name="Stationen")
+#m
+
+
 #Visualisierung
 df = pd.read_csv("CPO-Monitoring.csv", parse_dates=['Datum'])
 df['Standorte'] = df['Standorte'].astype('int')
@@ -95,7 +107,7 @@ df['Plugs'] = df['Plugs'].astype('int')
 
 attributes = ["Standorte", "Ladesaeulen", "Plugs"]
 bigfive = ["CHEVP", "CH*CCC", "CH*ECU", "CH*REP", "CH*SWISSCHARGE"]
-otherrealtime = ["CH*AIL","CH*ENMOBILECHARGE","CH*EVAEMOBILITAET","CH*EWACHARGE","CH*FASTNED","CH*IBC","CH*MOBILECHARGE","CH*MOBIMOEMOBILITY","CH*PACEMOBILITY","CH*PARKCHARGE", "CH*SCHARGE", "CH*TAE"]
+otherrealtime = ["CH*AIL","CH*ENMOBILECHARGE","CH*EVAEMOBILITAET","CH*EWACHARGE","CH*FASTNED","CH*IBC","CH*MOBILECHARGE","CH*MOBIMOEMOBILITY","CH*PACEMOBILITY","CH*PARKCHARGE", "CH*SCHARGE", "CH*TAE", "CH*SCH"]
 
 CPO_dict = {
     "CHEVP": "GreenMotion",
@@ -114,7 +126,8 @@ CPO_dict = {
     "CH*PACEMOBILITY":"PAC e-moblity",
     "CH*PARKCHARGE":"PARK & CHARGE",
     "CH*SCHARGE":"S-Charge",
-    "CH*TAE":"Matterhorn Terminal Täsch"
+    "CH*TAE":"Matterhorn Terminal Täsch",
+    "CH*SCH": "Saascharge"
 }
 
 # Overviews
