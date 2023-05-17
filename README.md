@@ -41,6 +41,7 @@ Welche OperatorID gehört zu welchem Betreiber? Siehe [Liste](https://github.com
 ![image](plots/CH*PARKCHARGE-Standorte.png)
 ![image](plots/CH*SCHARGE-Standorte.png)
 ![image](plots/CH*TAE-Standorte.png)
+![image](plots/CH*SCH-Standorte.png)
 
 
 ## Anzahl Ladesäulen pro CPO
@@ -63,6 +64,7 @@ Welche OperatorID gehört zu welchem Betreiber? Siehe [Liste](https://github.com
 ![image](plots/CH*PARKCHARGE-Ladesaeulen.png)
 ![image](plots/CH*SCHARGE-Ladesaeulen.png)
 ![image](plots/CH*TAE-Ladesaeulen.png)
+![image](plots/CH*SCH-Ladesaeulen.png)
 
 
 ## Anzahl Plugs pro CPO
@@ -85,6 +87,7 @@ Welche OperatorID gehört zu welchem Betreiber? Siehe [Liste](https://github.com
 ![image](plots/CH*PARKCHARGE-Plugs.png)
 ![image](plots/CH*SCHARGE-Plugs.png)
 ![image](plots/CH*TAE-Plugs.png)
+![image](plots/CH*SCH-Plugs.png)
 
 
 ## CPOs ohne Echtzeit-Daten
