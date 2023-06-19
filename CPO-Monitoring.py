@@ -107,7 +107,7 @@ df['Plugs'] = df['Plugs'].astype('int')
 
 attributes = ["Standorte", "Ladesaeulen", "Plugs"]
 bigfive = ["CHEVP", "CH*CCC", "CH*ECU", "CH*REP", "CH*SWISSCHARGE"]
-otherrealtime = ["CH*AIL","CH*ENMOBILECHARGE","CH*EVAEMOBILITAET","CH*EWACHARGE","CH*FASTNED","CH*IBC","CH*MOBILECHARGE","CH*MOBIMOEMOBILITY","CH*PACEMOBILITY","CH*PARKCHARGE", "CH*SCHARGE", "CH*TAE", "CH*SCH"]
+otherrealtime = ["CH*AIL","CH*ENMOBILECHARGE","CH*EVAEMOBILITAET","CH*EWACHARGE","CH*FASTNED","CH*IBC","CH*MOBILECHARGE","CH*MOBIMOEMOBILITY","CH*PACEMOBILITY","CH*PARKCHARGE", "CH*SCHARGE", "CH*TAE", "CH*SCH", "CH*CPI"]
 
 CPO_dict = {
     "CHEVP": "GreenMotion",
@@ -127,7 +127,8 @@ CPO_dict = {
     "CH*PARKCHARGE":"PARK & CHARGE",
     "CH*SCHARGE":"S-Charge",
     "CH*TAE":"Matterhorn Terminal Täsch",
-    "CH*SCH": "Saascharge"
+    "CH*SCH": "Saascharge",
+    "CH*CPI": "Chargepoint"
 }
 
 # Overviews
