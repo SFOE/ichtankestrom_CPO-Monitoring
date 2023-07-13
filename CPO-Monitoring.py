@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 import geopandas as gpd
 import fiona
-#import leafmap
+import leafmap
 import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -44,12 +44,17 @@ df_join = gpd.sjoin(Schweiz, df, how='right', predicate='intersects')
 df = df_join[df_join["UUID"].notnull()]
 
 #outside Switzerland
-#df_outside = df_join[df_join["UUID"].isnull()]
+df_outside = df_join[df_join["UUID"].isnull()]
 
 #Ladesaeulen
 df_ladesaeulen = df['OperatorID'].value_counts().to_frame().reset_index()
 df_ladesaeulen.rename(columns={"count": "Ladesaeulen"}, inplace=True)
 df_ladesaeulen.rename(columns={"index": "OperatorID"}, inplace=True)
+
+#Renewable Energy
+df_renewable_true = df[df["RenewableEnergy"] == True][["OperatorID"]]
+df_renewable_true = df_renewable_true['OperatorID'].value_counts().to_frame().reset_index()
+df_renewable_true.rename(columns={"count": "Renewable_count"}, inplace=True)
 
 #Standorte
 df_standorte = df[["GeoCoordinates.Google","OperatorID"]]
@@ -87,17 +92,20 @@ df_plugs.rename(columns={"index": "OperatorID"}, inplace=True)
 #Zusammenfuehren
 df_result = pd.merge(df_standorte, df_ladesaeulen, how="left", on=["OperatorID"])
 df_result = pd.merge(df_result, df_plugs, how="left", on=["OperatorID"])
-df_result["Datum"]= datetime.today().strftime("%Y-%m-%d")
+df_result = pd.merge(df_result, df_renewable_true, how="left", on=["OperatorID"])
+df_result["Datum"] = datetime.today().strftime("%Y-%m-%d")
+df_result["ErneuerbareEnergie_Prozent"] = round(df_result["Renewable_count"]/df_result["Ladesaeulen"]*100)
+df_result = df_result[["OperatorID", "Standorte", "Ladesaeulen", "Plugs", "ErneuerbareEnergie_Prozent", "Datum"]]
 
-#Speichern
+#Speichern / hinzufuegen zu csv
 df_result.to_csv("CPO-Monitoring.csv", header=False, index=False, mode='a')
 
+#df_outside
 
 #m = leafmap.Map(height="400px", width="800px")
 #m.add_basemap("SwissFederalGeoportal.NationalMapColor")
 #m.add_gdf(df_outside, layer_name="Stationen")
 #m
-
 
 #Visualisierung
 df = pd.read_csv("CPO-Monitoring.csv", parse_dates=['Datum'])
@@ -105,9 +113,9 @@ df['Standorte'] = df['Standorte'].astype('int')
 df['Ladesaeulen'] = df['Ladesaeulen'].astype('int')
 df['Plugs'] = df['Plugs'].astype('int')
 
-attributes = ["Standorte", "Ladesaeulen", "Plugs"]
+attributes = ["Standorte", "Ladesaeulen", "Plugs", "ErneuerbareEnergie_Prozent"]
 bigfive = ["CHEVP", "CH*CCC", "CH*ECU", "CH*REP", "CH*SWISSCHARGE"]
-otherrealtime = ["CH*AIL","CH*ENMOBILECHARGE","CH*EVAEMOBILITAET","CH*EWACHARGE","CH*FASTNED","CH*IBC","CH*MOBILECHARGE","CH*MOBIMOEMOBILITY","CH*PACEMOBILITY","CH*PARKCHARGE", "CH*SCHARGE", "CH*TAE", "CH*SCH", "CH*CPI"]
+otherrealtime = ["CH*AIL","CH*ENMOBILECHARGE","CH*EVAEMOBILITAET","CH*EWACHARGE","CH*FASTNED","CH*IBC","CH*MOBILECHARGE","CH*MOBIMOEMOBILITY","CH*PACEMOBILITY","CH*PARKCHARGE", "CH*SCHARGE", "CH*TAE", "CH*SCH"]
 
 CPO_dict = {
     "CHEVP": "GreenMotion",
@@ -127,8 +135,7 @@ CPO_dict = {
     "CH*PARKCHARGE":"PARK & CHARGE",
     "CH*SCHARGE":"S-Charge",
     "CH*TAE":"Matterhorn Terminal Täsch",
-    "CH*SCH": "Saascharge",
-    "CH*CPI": "Chargepoint"
+    "CH*SCH": "Saascharge"
 }
 
 # Overviews
@@ -139,7 +146,7 @@ for attribute in attributes:
     df_all = df_all.replace({"OperatorID": CPO_dict})
     df_all = df_all.pivot(index="Datum", columns=["OperatorID"], values=attribute)
     df_all.plot(figsize=(15,10))
-    plt.legend(loc='lower left')
+    plt.legend(loc='best')
     plt.title("Anzahl " + attribute)
     plt.savefig('plots/Overview-Big5-' + attribute + '.png')
     #plt.show()
@@ -150,7 +157,7 @@ for attribute in attributes:
     df_all = df_all.replace({"OperatorID": CPO_dict})
     df_all = df_all.pivot(index="Datum", columns=["OperatorID"],values=attribute)
     df_all.plot(figsize=(15,10))
-    plt.legend(loc='lower left')
+    plt.legend(loc='best')
     plt.title("Anzahl " + attribute)
     plt.savefig('plots/Overview-otherrealtime-' + attribute + '.png')
     #plt.show()
@@ -162,7 +169,7 @@ for attribute in attributes:
     df_all = df_all[~df_all["OperatorID"].isin(otherrealtime)]
     df_all = df_all.pivot(index="Datum", columns=["OperatorID"],values=attribute)
     df_all.plot(figsize=(15,10))
-    plt.legend(loc='lower left')
+    plt.legend(loc='best')
     plt.title("Anzahl " + attribute)
     plt.savefig('plots/Overview-offline-' + attribute + '.png')
     #plt.show()
@@ -177,7 +184,7 @@ for attribute in attributes:
         df_cpo = df_cpo.replace({"OperatorID": CPO_dict})
         df_cpo_all = df_cpo.pivot(index="Datum", columns=["OperatorID"],values=attribute)
         df_cpo_all.plot(figsize=(15,10))
-        plt.legend(loc='lower left')
+        plt.legend(loc='best')
         plt.title("Anzahl " + attribute)
         plt.savefig('plots/' + cpo + '-' + attribute + '.png')
         #plt.show()
