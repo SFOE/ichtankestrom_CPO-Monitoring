@@ -14,12 +14,14 @@ Welche OperatorID gehört zu welchem Betreiber? Siehe [Liste](https://github.com
 ![image](plots/Overview-Big5-Standorte.png)
 ![image](plots/Overview-Big5-Ladesaeulen.png)
 ![image](plots/Overview-Big5-Plugs.png)
+![image](plots/Overview-Big5-ErneuerbareEnergie_Prozent.png)
 
 ## CPOs mit Echtzeit-Daten ohne Big Five
 
 ![image](plots/Overview-otherrealtime-Standorte.png)
 ![image](plots/Overview-otherrealtime-Ladesaeulen.png)
 ![image](plots/Overview-otherrealtime-Plugs.png)
+![image](plots/Overview-otherrealtime-ErneuerbareEnergie_Prozent.png)
 
 ## Anzahl Standorte pro CPO
 
