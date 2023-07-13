@@ -97,3 +97,4 @@ Welche OperatorID gehört zu welchem Betreiber? Siehe [Liste](https://github.com
 ![image](plots/Overview-offline-Standorte.png)
 ![image](plots/Overview-offline-Ladesaeulen.png)
 ![image](plots/Overview-offline-Plugs.png)
+![image](plots/Overview-offline-ErneuerbareEnergie_Prozent.png)
