@@ -113,7 +113,7 @@ df['Standorte'] = df['Standorte'].astype('int')
 df['Ladesaeulen'] = df['Ladesaeulen'].astype('int')
 df['Plugs'] = df['Plugs'].astype('int')
 
-attributes = ["Standorte", "Ladesaeulen", "Plugs", "ErneuerbareEnergie_Prozent"]
+attributes = ["Standorte", "Ladesaeulen", "Plugs"]
 bigfive = ["CHEVP", "CH*CCC", "CH*ECU", "CH*REP", "CH*SWISSCHARGE"]
 otherrealtime = ["CH*AIL","CH*ENMOBILECHARGE","CH*EVAEMOBILITAET","CH*EWACHARGE","CH*FASTNED","CH*IBC","CH*MOBILECHARGE","CH*MOBIMOEMOBILITY","CH*PACEMOBILITY","CH*PARKCHARGE", "CH*SCHARGE", "CH*TAE", "CH*SCH"]
 
@@ -189,3 +189,14 @@ for attribute in attributes:
         plt.savefig('plots/' + cpo + '-' + attribute + '.png')
         #plt.show()
         plt.close()
+    
+# Erneuerbare Energie
+df_erneuerbar = df.replace({"OperatorID": CPO_dict})
+df_erneuerbar = df_erneuerbar.pivot(index="Datum", columns=["OperatorID"],values="ErneuerbareEnergie_Prozent")
+df_erneuerbar.dropna(axis=1, how="all", inplace=True)
+df_erneuerbar.plot(figsize=(15,10))
+plt.legend(loc='best')
+plt.title("Anteil Ladestationen mit Erneuerbarer Energie in Prozent, nur CPOs > 0 %")
+plt.savefig('plots/Overview-ErneuerbareEnergie_Prozent.png')
+#plt.show()
+plt.close()
