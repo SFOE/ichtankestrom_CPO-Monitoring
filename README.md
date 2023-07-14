@@ -2,6 +2,7 @@
 
 - [Big Five](#big-five)
 - [CPOs mit Echtzeit-Daten ohne Big Five](#cpos-mit-echtzeit-daten-ohne-big-five)
+- [Erneuerbare Energie](#erneuerbare-energie)
 - [Anzahl Standorte pro CPO](#anzahl-standorte-pro-cpo)
 - [Anzahl Ladesäulen pro CPO](#anzahl-ladesäulen-pro-cpo)
 - [Anzahl Plugs pro CPO](#anzahl-plugs-pro-cpo)
@@ -14,14 +15,16 @@ Welche OperatorID gehört zu welchem Betreiber? Siehe [Liste](https://github.com
 ![image](plots/Overview-Big5-Standorte.png)
 ![image](plots/Overview-Big5-Ladesaeulen.png)
 ![image](plots/Overview-Big5-Plugs.png)
-![image](plots/Overview-Big5-ErneuerbareEnergie_Prozent.png)
 
 ## CPOs mit Echtzeit-Daten ohne Big Five
 
 ![image](plots/Overview-otherrealtime-Standorte.png)
 ![image](plots/Overview-otherrealtime-Ladesaeulen.png)
 ![image](plots/Overview-otherrealtime-Plugs.png)
-![image](plots/Overview-otherrealtime-ErneuerbareEnergie_Prozent.png)
+
+## Erneuerbare Energie
+
+![image](plots/Overview-ErneuerbareEnergie_Prozent.png)
 
 ## Anzahl Standorte pro CPO
 
@@ -97,4 +100,3 @@ Welche OperatorID gehört zu welchem Betreiber? Siehe [Liste](https://github.com
 ![image](plots/Overview-offline-Standorte.png)
 ![image](plots/Overview-offline-Ladesaeulen.png)
 ![image](plots/Overview-offline-Plugs.png)
-![image](plots/Overview-offline-ErneuerbareEnergie_Prozent.png)
