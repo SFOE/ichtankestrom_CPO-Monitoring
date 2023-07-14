@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 import geopandas as gpd
 import fiona
-import leafmap
+#import leafmap
 import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
