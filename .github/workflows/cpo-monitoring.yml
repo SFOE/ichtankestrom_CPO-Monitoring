@@ -3,7 +3,7 @@ name: cpo-monitoring
 on: 
   workflow_dispatch:
   schedule:
-    - cron: "15 5 * * *" #runs at 05:15 UTC
+    - cron: "15 5 * * *" #runs at 05:15 UTC yes
 
 jobs:
   build:
