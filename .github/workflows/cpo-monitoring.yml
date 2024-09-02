@@ -1,4 +1,4 @@
-name: cpo-monitoring 
+name: cpo-monitoring
 
 on: 
   workflow_dispatch:
